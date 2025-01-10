@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +14,7 @@ import { ContractPDF } from './ContractPDF';
 
 const ContractForm = () => {
 	const [pdfData, setPdfData] = useState<ContractFormData | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		control,
@@ -35,6 +35,7 @@ const ContractForm = () => {
 				renavan: data.renavan.replace(/\D/g, ''),
 			};
 			console.log('Form submitted:', cleanData);
+			setIsLoading(true);
 			setPdfData(cleanData);
 		} catch (error) {
 			console.error('Error submitting form:', error);
@@ -42,10 +43,10 @@ const ContractForm = () => {
 	};
 
 	return (
-		<div className="container mx-auto p-4 max-w-2xl">
+		<div className="container mx-auto  max-w-1xl">
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-2xl font-bold text-center">Contrato de Compra e Venda de Motocicleta</CardTitle>
+					<CardTitle className="text-2xl font-bold text-center">Formulario de Procuração de Compra</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form
@@ -239,24 +240,25 @@ const ContractForm = () => {
 							</div>
 						</div>
 
-						<Button
-							type="submit"
-							className="w-full"
-							disabled={isSubmitting}>
-							{isSubmitting ? 'Gerando...' : 'Gerar Contrato'}
-						</Button>
-					</form>
-
-					{pdfData && (
-						<div className="mt-4 text-center">
-							<PDFDownloadLink
-								document={<ContractPDF data={pdfData} />}
-								fileName={`contrato-${pdfData.placa}.pdf`}
-								className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-								{({ blob, url, loading, error }) => (loading ? 'Gerando PDF...' : 'Baixar Contrato')}
-							</PDFDownloadLink>
+						<div className="flex justify-between">
+							<Button
+								type="submit"
+								className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+								disabled={isSubmitting}>
+								{isSubmitting ? 'Gerando...' : 'Gerar Contrato'}
+							</Button>
+							{pdfData && (
+								<div className="">
+									<PDFDownloadLink
+										document={<ContractPDF data={pdfData} />}
+										fileName={`contrato-${pdfData.placa}.pdf`}
+										className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+										{isLoading ? 'Baixar PDF' : 'Gerando PDF...'}
+									</PDFDownloadLink>
+								</div>
+							)}
 						</div>
-					)}
+					</form>
 				</CardContent>
 			</Card>
 		</div>
