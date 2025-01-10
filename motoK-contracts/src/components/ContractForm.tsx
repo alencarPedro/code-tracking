@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputMask from 'react-input-mask';
@@ -241,8 +242,7 @@ const ContractForm = () => {
 						<div className="mt-4 text-center">
 							<PDFDownloadLink
 								document={<ContractPDF data={pdfData} />}
-								fileName={`contrato-${pdfData.placa}.pdf`}
-								className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+								fileName={`contrato-${pdfData.placa}.pdf`}>
 								{({ blob, url, loading, error }) => (loading ? 'Gerando PDF...' : 'Baixar Contrato')}
 							</PDFDownloadLink>
 						</div>
