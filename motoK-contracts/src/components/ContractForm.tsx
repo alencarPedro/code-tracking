@@ -100,9 +100,18 @@ const ContractForm = () => {
 						{/* Contract Text Section */}
 						<div className="p-4 bg-gray-50 rounded">
 							<p className="text-sm">
-								Pelo presente instrumento particular, as partes acima identificadas têm, entre si, justo e acertado o
-								presente Contrato de Compra e Venda de Motocicleta, que se regerá pelas cláusulas seguintes e pelas
-								condições descritas no presente.
+								{`O Sr. `}
+								<strong>{import.meta.env.VITE_PROCURADOR_NOME}</strong>
+								{`, brasileiro,
+								${import.meta.env.VITE_PROCURADOR_ESTADO_CIVIL}, portador da
+								carteira de identidade nº. ${import.meta.env.VITE_PROCURADOR_RG}
+								e do CPF ${import.meta.env.VITE_PROCURADOR_CPF},
+								residente e domiciliado a ${import.meta.env.VITE_PROCURADOR_ENDERECO};`}
+							</p>
+							<p className="text-sm mt-2">
+								Para o fim especial de assinar em nome do proprietário adquirente o Certificado de Registro de Veículo
+								(CRV) do veículo descrito abaixo e podendo assim representar o PROPRIETÁRIO COMPRADOR do veículo,
+								perante a qualquer Órgão Público que exija a assinatura do mesmo no CRV / ATPV
 							</p>
 						</div>
 

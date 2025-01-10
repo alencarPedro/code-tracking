@@ -62,7 +62,13 @@ interface ContractPDFProps {
 export function ContractPDF({ data }: ContractPDFProps) {
 	const today = new Date().toLocaleDateString('pt-BR');
 
-	const procuradorText = `O Sr. ${storeConfig.procurador.nome}, brasileiro, ${storeConfig.procurador.estadoCivil}, portador da carteira de identidade nº. ${storeConfig.procurador.rg} e do CPF ${storeConfig.procurador.cpf}, residente e domiciliado a ${storeConfig.procurador.endereco}`;
+	const procuradorText = (
+		<Text>
+			O Sr. <Text style={{ fontWeight: 'bold' }}>{storeConfig.procurador.nome}</Text>, brasileiro,{' '}
+			{storeConfig.procurador.estadoCivil}, portador da carteira de identidade nº. {storeConfig.procurador.rg} e do CPF{' '}
+			{storeConfig.procurador.cpf}, residente e domiciliado a {storeConfig.procurador.endereco}
+		</Text>
+	);
 
 	return (
 		<Document>
@@ -87,9 +93,7 @@ export function ContractPDF({ data }: ContractPDFProps) {
 				<View style={styles.mainContent}>
 					<Text>NOMEIO E CONSTITUO MEUS BASTANTES PROCURADORES:</Text>
 
-					<View style={styles.procuradorSection}>
-						<Text>{procuradorText}</Text>
-					</View>
+					<View style={styles.procuradorSection}>{procuradorText}</View>
 
 					<Text>
 						Para o fim especial de assinar em nome do proprietário adquirente o Certificado de Registro de Veículo (CRV)
