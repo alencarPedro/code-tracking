@@ -46,22 +46,27 @@ export function ComboboxFormField({
 							role="combobox"
 							aria-expanded={open}
 							className={cn(
-								'w-full justify-between',
+								'w-full h-11 sm:h-10 justify-between font-normal text-left',
+								'bg-background hover:bg-accent hover:text-accent-foreground',
+								'border border-input',
 								!field.value && 'text-muted-foreground',
-								error && 'border-red-500'
+								error && 'border-red-500 focus-visible:ring-red-500',
+								open && 'ring-2 ring-ring ring-offset-2'
 							)}>
 							{field.value ? options.find((option) => option.value === field.value)?.label : placeholder}
 							<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-[200px] p-0">
-						<Command>
+					<PopoverContent
+						className="w-[var(--radix-popover-trigger-width)] p-0"
+						align="start">
+						<Command className="w-full">
 							<CommandInput
 								placeholder={`Procurar ${placeholder.toLowerCase()}...`}
 								className="h-9"
 							/>
-							<CommandList>
-								<CommandEmpty>{noResultsText}</CommandEmpty>
+							<CommandList className="max-h-[200px] overflow-auto">
+								<CommandEmpty className="py-2 px-3 text-sm text-muted-foreground">{noResultsText}</CommandEmpty>
 								<CommandGroup>
 									{options.map((option) => (
 										<CommandItem
@@ -70,7 +75,8 @@ export function ComboboxFormField({
 											onSelect={(currentValue) => {
 												field.onChange(currentValue === field.value ? '' : currentValue);
 												setOpen(false);
-											}}>
+											}}
+											className="cursor-pointer">
 											{option.label}
 											<Check
 												className={cn('ml-auto h-4 w-4', field.value === option.value ? 'opacity-100' : 'opacity-0')}
