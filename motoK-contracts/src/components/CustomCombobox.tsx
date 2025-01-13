@@ -26,8 +26,18 @@ const CustomCombobox = ({
 }: CustomComboboxProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [filteredOptions, setFilteredOptions] = useState<Option[]>(options);
+	const [displayValue, setDisplayValue] = useState('');
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (value) {
+			const selectedOption = options.find((opt) => opt.value === value || opt.label === value);
+			setDisplayValue(selectedOption ? selectedOption.label : value);
+		} else {
+			setDisplayValue('');
+		}
+	}, [value, options]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -41,12 +51,12 @@ const CustomCombobox = ({
 	}, []);
 
 	const handleInputClick = () => {
-		setFilteredOptions(options); // Show all options
+		setFilteredOptions(options);
 		setIsOpen(true);
-		inputRef.current?.focus();
 	};
 
 	const handleInputChange = (inputValue: string) => {
+		setDisplayValue(inputValue);
 		onChange(inputValue);
 
 		const filtered = options.filter(
@@ -60,9 +70,12 @@ const CustomCombobox = ({
 	};
 
 	const handleOptionClick = (option: Option) => {
-		onChange(option.label);
+		setDisplayValue(option.label);
+		onChange(option.value);
 		setIsOpen(false);
-		inputRef.current?.focus();
+		if (inputRef.current) {
+			inputRef.current.blur();
+		}
 	};
 
 	return (
@@ -71,7 +84,7 @@ const CustomCombobox = ({
 			className="relative w-full">
 			<Input
 				ref={inputRef}
-				value={value}
+				value={displayValue}
 				onChange={(e) => handleInputChange(e.target.value)}
 				onClick={handleInputClick}
 				onFocus={handleInputClick}
@@ -87,6 +100,7 @@ const CustomCombobox = ({
 							onClick={() => handleOptionClick(option)}
 							className={cn(
 								'px-3 py-2 text-sm cursor-pointer hover:bg-gray-100',
+								option.value === value && 'bg-gray-100',
 								index !== filteredOptions.length - 1 && 'border-b border-gray-100'
 							)}>
 							{option.label}
