@@ -33,4 +33,5 @@ export const COMMON_COLORS = [
 	{ value: 'laranja', label: 'Laranja' },
 	{ value: 'marrom', label: 'Marrom' },
 	{ value: 'cinza', label: 'Cinza' },
+	{ value: 'bege', label: 'Bege' },
 ];
