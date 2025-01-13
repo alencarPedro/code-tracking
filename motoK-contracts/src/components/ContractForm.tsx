@@ -7,12 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { contractFormSchema } from '@/lib/validations/contract';
-import { ComboboxFormField } from './ui/combobox-form-field';
 import { FUEL_TYPES, MOTORCYCLE_BRANDS, COMMON_COLORS } from '@/lib/constants/auto-data';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { ContractPDF } from './ContractPDF';
 import { ContractFormData } from '@/types/contract';
 import { cn } from '@/lib/utils';
+import CustomCombobox from './CustomCombobox';
 
 const ContractForm = () => {
 	const [pdfData, setPdfData] = useState<ContractFormData | null>(null);
@@ -59,10 +59,10 @@ const ContractForm = () => {
 	};
 
 	return (
-		<div className="container mx-auto px-4 sm:px-6 py-6">
+		<div className="container px-4 py-6 mx-auto sm:px-6">
 			<Card className="w-full shadow-lg">
 				<CardHeader className="py-4 sm:py-6">
-					<CardTitle className="text-xl sm:text-2xl font-bold text-center">
+					<CardTitle className="text-xl font-bold text-center sm:text-2xl">
 						Formulario de Procuração de Compra
 					</CardTitle>
 				</CardHeader>
@@ -72,8 +72,8 @@ const ContractForm = () => {
 						className="space-y-4 sm:space-y-6">
 						{/* Buyer Information Section */}
 						<div className="space-y-3 sm:space-y-4">
-							<h2 className="text-lg sm:text-xl font-semibold">Informações do Comprador</h2>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<h2 className="text-lg font-semibold sm:text-xl">Informações do Comprador</h2>
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 								<div className="space-y-3 sm:space-y-4">
 									<Label className="text-sm font-medium">Nome Completo</Label>
 									<Input
@@ -120,8 +120,8 @@ const ContractForm = () => {
 						</div>
 
 						{/* Contract Text Section */}
-						<div className="p-3 sm:p-4 bg-gray-50 rounded text-justify">
-							<p className="text-xs sm:text-sm leading-relaxed">
+						<div className="p-3 text-justify rounded sm:p-4 bg-gray-50">
+							<p className="text-xs leading-relaxed sm:text-sm">
 								{`O Sr. `}
 								<strong>{import.meta.env.VITE_PROCURADOR_NOME}</strong>
 								{`, brasileiro,
@@ -130,7 +130,7 @@ const ContractForm = () => {
 								e do CPF ${import.meta.env.VITE_PROCURADOR_CPF},
 								residente e domiciliado a ${import.meta.env.VITE_PROCURADOR_ENDERECO};`}
 							</p>
-							<p className="text-xs sm:text-sm mt-2 leading-relaxed">
+							<p className="mt-2 text-xs leading-relaxed sm:text-sm">
 								Para o fim especial de assinar em nome do proprietário adquirente o Certificado de Registro de Veículo
 								(CRV) do veículo descrito abaixo e podendo assim representar o PROPRIETÁRIO COMPRADOR do veículo,
 								perante a qualquer Órgão Público que exija a assinatura do mesmo no CRV / ATPV
@@ -140,16 +140,22 @@ const ContractForm = () => {
 						{/* Motorcycle Information Section */}
 						<div className="space-y-4">
 							<h2 className="text-xl font-semibold">Informações da Motocicleta</h2>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-								<div className="space-y-2 w-full">
+							<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+								<div className="w-full space-y-2">
 									<Label className="text-sm font-medium">Marca</Label>
-									<ComboboxFormField
+
+									<Controller
 										control={control}
 										name="marca"
-										options={MOTORCYCLE_BRANDS}
-										placeholder="Selecione a marca"
-										error={!!errors.marca}
-										aria-required="true"
+										render={({ field }) => (
+											<CustomCombobox
+												options={MOTORCYCLE_BRANDS}
+												value={field.value}
+												onChange={field.onChange}
+												placeholder="Selecione a marca"
+												error={!!errors.marca}
+											/>
+										)}
 									/>
 									{errors.marca && <p className="text-sm text-red-500">{errors.marca.message}</p>}
 								</div>
@@ -196,13 +202,19 @@ const ContractForm = () => {
 								</div>
 								<div className="space-y-2">
 									<Label className="text-sm font-medium">Cor</Label>
-									<ComboboxFormField
+
+									<Controller
 										control={control}
 										name="cor"
-										options={COMMON_COLORS}
-										placeholder="Selecione a cor"
-										error={!!errors.cor}
-										aria-required="true"
+										render={({ field }) => (
+											<CustomCombobox
+												options={COMMON_COLORS}
+												value={field.value}
+												onChange={field.onChange}
+												placeholder="Selecione a cor"
+												error={!!errors.cor}
+											/>
+										)}
 									/>
 									{errors.cor && <p className="text-sm text-red-500">{errors.cor.message}</p>}
 								</div>
@@ -255,20 +267,26 @@ const ContractForm = () => {
 								</div>
 								<div className="space-y-2 ">
 									<Label className="text-sm font-medium">Combustível</Label>
-									<ComboboxFormField
+
+									<Controller
 										control={control}
 										name="combustivel"
-										options={FUEL_TYPES}
-										placeholder="Selecione o combustível"
-										error={!!errors.combustivel}
-										aria-required="true"
+										render={({ field }) => (
+											<CustomCombobox
+												options={FUEL_TYPES}
+												value={field.value}
+												onChange={field.onChange}
+												placeholder="Selecione o combustível"
+												error={!!errors.combustivel}
+											/>
+										)}
 									/>
 									{errors.combustivel && <p className="text-sm text-red-500">{errors.combustivel.message}</p>}
 								</div>
 							</div>
 						</div>
 
-						<div className="flex flex-col sm:flex-row justify-between gap-4 sm:gap-6">
+						<div className="flex flex-col justify-between gap-4 sm:flex-row sm:gap-6">
 							<Button
 								type="submit"
 								className="w-full sm:w-auto"
@@ -280,8 +298,8 @@ const ContractForm = () => {
 								<div className="w-full sm:w-auto">
 									<PDFDownloadLink
 										document={<ContractPDF data={pdfData} />}
-										fileName={`contrato-${pdfData.placa}.pdf`}
-										className="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+										fileName={`Procuração-${pdfData.nome}.pdf`}
+										className="inline-flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium transition-colors rounded-md ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90">
 										{isLoading ? 'Baixar PDF' : 'Gerando PDF...'}
 									</PDFDownloadLink>
 
