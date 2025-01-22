@@ -75,7 +75,7 @@ const ContractForm = () => {
 							<h2 className="text-lg font-semibold sm:text-xl">Informações do Comprador</h2>
 							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 								<div className="space-y-3 sm:space-y-4">
-									<Label className="text-sm font-medium">Nome Completo</Label>
+									<Label className="text-sm font-medium">Nome Completo/Razão Social</Label>
 									<Input
 										{...register('nome')}
 										className={cn('h-11 sm:h-10', errors.nome ? 'border-red-500' : '')}
