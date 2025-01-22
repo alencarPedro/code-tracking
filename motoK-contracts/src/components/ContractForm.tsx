@@ -83,27 +83,32 @@ const ContractForm = () => {
 									/>
 									{errors.nome && <p className="text-sm text-red-500">{errors.nome.message}</p>}
 								</div>
-								<div className="space-y-2">
-									<Label className="text-sm font-medium">CPF</Label>
+								<div className="space-y-3 sm:space-y-4">
+									<Label className="text-sm font-medium">CPF/CNPJ</Label>
 									<Controller
 										name="cpf"
 										control={control}
-										render={({ field }) => (
-											<InputMask
-												mask="999.999.999-99"
-												value={field.value}
-												onChange={field.onChange}>
-												{(inputProps) => (
-													<Input
-														{...inputProps}
-														type="text"
-														placeholder="000.000.000-00"
-														className={cn('h-11 sm:h-10', errors.cpf ? 'border-red-500' : '')}
-														aria-required="true"
-													/>
-												)}
-											</InputMask>
-										)}
+										render={({ field }) => {
+											const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+												const value = e.target.value.replace(/\D/g, '');
+												const formattedValue =
+													value.length <= 11
+														? value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+														: value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+												field.onChange(formattedValue);
+											};
+
+											return (
+												<Input
+													{...field}
+													maxLength={18} // Maximum length for CNPJ with formatting
+													placeholder="000.000.000-00 ou 00.000.000/0000-00"
+													className={cn('h-11 sm:h-10', errors.cpf ? 'border-red-500' : '')}
+													onChange={handleChange}
+													aria-required="true"
+												/>
+											);
+										}}
 									/>
 									{errors.cpf && <p className="text-sm text-red-500">{errors.cpf.message}</p>}
 								</div>

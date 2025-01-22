@@ -10,13 +10,11 @@ export const contractFormSchema = z.object({
 
 	cpf: z
 		.string()
-		.nonempty('CPF é obrigatório')
-		.min(11, 'CPF inválido')
-		.max(14, 'CPF inválido')
-		.refine((cpf) => {
-			const cpfClean = cpf.replace(/[^\d]/g, '');
-			return cpfClean.length === 11;
-		}, 'CPF inválido'),
+		.nonempty('CPF/CNPJ é obrigatório')
+		.refine((value) => {
+			const numbers = value.replace(/\D/g, '');
+			return numbers.length === 11 || numbers.length === 14;
+		}, 'CPF/CNPJ inválido'),
 
 	endereco: z
 		.string()
